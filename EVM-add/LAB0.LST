@@ -1,4 +1,4 @@
-Turbo Assembler	 Version 4.1	    02/18/25 08:27:27	    Page 1
+Turbo Assembler	 Version 4.1	    02/18/25 09:08:16	    Page 1
 lab0.asm
 
 
@@ -60,7 +60,7 @@ lab0.asm
      55				     ; Вход: набранная с клавиатуры цифра
      56				     ; Выход: в AL - введенное число
      57	002D			     input_digit proc
-Turbo Assembler	 Version 4.1	    02/18/25 08:27:27	    Page 2
+Turbo Assembler	 Version 4.1	    02/18/25 09:08:16	    Page 2
 lab0.asm
 
 
@@ -99,7 +99,7 @@ lab0.asm
      89	0055			     add_and_show endp
      90	0055			     code ends
      91				     end start
-Turbo Assembler	 Version 4.1	    02/18/25 08:27:27	    Page 3
+Turbo Assembler	 Version 4.1	    02/18/25 09:08:16	    Page 3
 Symbol Table
 
 
@@ -109,7 +109,7 @@ Symbol Name			  Type	 Value
 
 ??DATE				  Text	 "02/18/25"
 ??FILENAME			  Text	 "lab0	  "
-??TIME				  Text	 "08:27:27"
+??TIME				  Text	 "09:08:16"
 ??VERSION			  Number 040A
 @CPU				  Text	 0101H
 @CURSEG				  Text	 CODE

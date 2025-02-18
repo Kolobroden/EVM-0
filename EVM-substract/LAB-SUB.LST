@@ -1,0 +1,127 @@
+Turbo Assembler	 Version 4.1	    02/18/25 09:07:22	    Page 1
+lab-sub.asm
+
+
+
+      1				     ; Резервирoвание места под стек
+      2	0000			     sseg segment stack	'stack'
+      3	0000  0100*(????)	     dw	256 dup(?)
+      4	0200			     sseg ends
+      5
+      6				     ; Определение данных
+      7	0000			     data segment
+      8				     ; Сообщения пользователю
+      9	0000  0A 0D 53 75 62 73	74+  msg1 db 10,13,'Substraction'
+     10	      72 61 63 74 69 6F	6E
+     11	000E  0A 0D 45 6E 74 65	72+  db	10,13,'Enter first number: ','$'
+     12	      20 66 69 72 73 74	20+
+     13	      6E 75 6D 62 65 72	3A+
+     14	      20 24
+     15	0025  0A 0D 45 6E 74 65	72+  msg2 db 10,13,'Enter second number: ','$'
+     16	      20 73 65 63 6F 6E	64+
+     17	      20 6E 75 6D 62 65	72+
+     18	      3A 20 24
+     19	003D  0A 0D 52 65 73 75	6C+  msg3 db 10,13,'Result = ','$'
+     20	      74 20 3D 20 24
+     21	0049			     data ends
+     22				     ; Сегмент кода
+     23	0000			     code segment
+     24				     assume cs:code,ds:data,ss:sseg
+     25	0000  B8 0000s		     start: mov	ax,data	; настроить сегментный
+     26	0003  8E D8		     mov ds,ax	 ; регистр DS на данные
+     27	0005  BA 0000r		     lea dx,msg1 ; вывести сообщение
+     28	0008  E8 001B		     call print_msg
+     29	000B  E8 001F		     call input_digit; ввести первое число
+     30	000E  8A D8		     mov bl,al	  ; и сохранить в регистре BL
+     31	0010  BA 0025r		     lea dx,msg2  ; вывести сообщение
+     32	0013  E8 0010		     call print_msg
+     33	0016  E8 0014		     call input_digit ;	ввести второе число
+     34	0019  BA 003Dr		     lea dx,msg3      ;	вывести сообщение
+     35	001C  E8 0007		     call print_msg
+     36	001F  E8 001A		     call substract_and_show; вычесть и	вывести результат
+     37
+     38	0022  B4 4C		     mov ah,4ch	      ;	завершить программу
+     39	0024  CD 21		     int 21h		 ; и выйти в DOS
+     40				     ; Подпрограмма	вывода сообщения	на дисплей
+     41				     ; Вход: DS:DX - адрес сообщения
+     42				     ; Выход: вывод сообщения на дисплей
+     43	0026			     print_msg proc
+     44	0026  50		     push ax	 ; сохранить AX
+     45	0027  B4 09		     mov ah,09h	; вывести сообщение
+     46	0029  CD 21		     int 21h	;  с помощью функции DOS
+     47	002B  58		     pop ax	; восстановить AX
+     48	002C  C3		     ret  ; вернуться в вызывающую программу
+     49	002D			     print_msg endp
+     50				     ; Подпрограмма	ввода числа с клавиатуры
+     51				     ; Вход: набранная с клавиатуры цифра
+     52				     ; Выход: в AL - введенное число
+     53	002D			     input_digit proc
+     54	002D			     input_again:
+     55	002D  B4 01		     mov ah,01h	 ; ввести	символ с	клавиатуры
+     56
+     57	002F  CD 21		     int 21h	 ;  с помощью функции DOS
+Turbo Assembler	 Version 4.1	    02/18/25 09:07:22	    Page 2
+lab-sub.asm
+
+
+
+     58	0031  3C 30		     cmp al,'0'	 ; если символ не цифра,
+     59	0033  7C F8		     jl	input_again ; то повторить ввод
+     60	0035  3C 39		     cmp al,'9'
+     61	0037  7F F4		     jg	input_again
+     62	0039  2C 30		     sub al,30h; преобразовать код символа
+     63				     ;	в число
+     64	003B  C3		     ret  ; вернуться в вызывающую программу
+     65	003C			     input_digit endp
+     66				     ; Подпрограмма	сложения двух чисел
+     67				     ;Вход:	AL,BL – слагаемые,
+     68				     ;выход: вывод результата на дисплей
+     69	003C			     substract_and_show	proc
+     70	003C  2A D8		     sub bl,al	 ; сложить (BL=BL-AL)
+     71	003E  79 08		     jns jump	; если результат >	0,
+     72	0040  F6 DB		     neg bl ; инвертируем bl	в положительное
+     73	0042  B4 02		     mov ah,02	   ; вывести младшую цифру
+     74	0044  B2 2D		     mov dl,2dh	    ;  2d - код минуса
+     75	0046  CD 21		     int 21h	   ;  прерывание функции
+     76
+     77	0048			     jump:
+     78	0048  80 C3 30		     add bl,'0'	; чтобы был код цифры, прибавляем код нуля
+     79	004B  B4 02		     mov ah, 02
+     80	004D  8A D3		     mov dl, bl
+     81	004F  CD 21		     int 21h
+     82	0051  C3		     ret  ; вернуться в вызывающую программу
+     83	0052			     substract_and_show	endp
+     84	0052			     code ends
+     85				     end start
+Turbo Assembler	 Version 4.1	    02/18/25 09:07:22	    Page 3
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/18/25"
+??FILENAME			  Text	 "lab-sub "
+??TIME				  Text	 "09:07:22"
+??VERSION			  Number 040A
+@CPU				  Text	 0101H
+@CURSEG				  Text	 CODE
+@FILENAME			  Text	 LAB-SUB
+@WORDSIZE			  Text	 2
+INPUT_AGAIN			  Near	 CODE:002D
+INPUT_DIGIT			  Near	 CODE:002D
+JUMP				  Near	 CODE:0048
+MSG1				  Byte	 DATA:0000
+MSG2				  Byte	 DATA:0025
+MSG3				  Byte	 DATA:003D
+PRINT_MSG			  Near	 CODE:0026
+START				  Near	 CODE:0000
+SUBSTRACT_AND_SHOW		  Near	 CODE:003C
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+CODE				  16  0052 Para	  none
+DATA				  16  0049 Para	  none
+SSEG				  16  0200 Para	  Stack	  STACK
+
